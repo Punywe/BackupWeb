@@ -212,10 +212,20 @@ app.post('/api/upload', upload.array('files'), async (req, res) => {
       }
     }
 
-    // Generate or use existing backup ID
+    // Generate clean readable backup folder name based on user's backup name / folder name
+    const rawBackupName = backupName || (isFolder ? folderName : files[0].originalname);
+    const sanitizedName = rawBackupName
+      .replace(/[/\\?%*:|"<>]/g, '_')
+      .replace(/\s+/g, '_')
+      .trim() || 'Backup';
+
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const timestampStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+
     const backupId = req.body.backupId && !req.body.backupId.includes('..') 
       ? req.body.backupId 
-      : `backup_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      : `${sanitizedName}_${timestampStr}`;
 
     const targetBackupDir = path.join(STORAGE_DIR, backupId);
     await fs.ensureDir(targetBackupDir);
