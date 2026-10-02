@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Production build outputs
+dist/
+client/dist/
+server/dist/
+client-dist/
+
+# Persistent storage & Uploaded backup data
+storage/
+backups_data/
+server/storage/
+.temp/
+
+# Environment files
+.env
+.env.local
+
+# Logs & temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db

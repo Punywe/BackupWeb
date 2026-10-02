@@ -1,0 +1,17 @@
+services:
+  backup-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lan-backup-gateway
+    restart: unless-stopped
+    ports:
+      # Port 5000 on host maps to container port 5000
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - STORAGE_DIR=/app/storage
+      - TZ=Asia/Bangkok
+    volumes:
+      # Files uploaded by LAN users will be permanently saved in ./backups_data on your host machine
+      - ./backups_data:/app/storage
